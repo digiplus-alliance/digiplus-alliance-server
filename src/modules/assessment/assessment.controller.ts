@@ -644,12 +644,6 @@ export class AssessmentController {
   ): Promise<SubmitAssessmentResDto> {
     const { assessment_id, responses, user_id } = submitAssessmentDto; // Destructure the DTO
 
-    // 🛑 ADD THIS LOG to see what your middleware is passing
-    console.log('--- Auth Debug ---');
-    console.log('req.user:', req.user);
-    console.log('user_id from body:', user_id);
-    console.log('------------------');
-
     // Use the authenticated user's ID as the final argument,
     // falling back to the DTO's user_id if needed, or null/undefined if not present.
 

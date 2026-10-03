@@ -45,10 +45,7 @@ export class ProfileController {
   @HttpCode(200)
   @Get('business')
   async getBusinessProfile(@GetUser() user) {
-    // console.log(user);
     return await this.profileService.getBusinessProfile(user._id);
-    // console.log('User from @GetUser:', user);
-    // console.log('User._id:', user._id);
 
     // Make sure you pass the value (string) to the service
     // return this.profileService.getBusinessProfile(user._id?.toString());

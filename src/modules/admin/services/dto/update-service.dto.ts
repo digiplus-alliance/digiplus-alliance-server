@@ -51,19 +51,12 @@ export class UpdateServiceDto {
   })
   @IsOptional()
   @Transform(({ value }) => {
-    console.log('Raw discounted_price value:', value, typeof value);
     if (value === '' || value === null || value === undefined) {
-      console.log('Returning undefined');
       return undefined;
     }
-    const num = Number(value);
-    console.log('Converted to number:', num);
-    return num;
+    return Number(value);
   })
-  @ValidateIf((o, value) => {
-    console.log('ValidateIf check:', value, value !== undefined);
-    return value !== undefined;
-  })
+  @ValidateIf((o, value) => value !== undefined)
   @IsNumber()
 @Min(0)
   discounted_price?: number;

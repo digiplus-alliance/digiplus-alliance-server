@@ -130,9 +130,6 @@ export class AuthService {
 
     const createUser = await this.userRepository.create(userPayload);
 
-    console.log('Role from DTO:', role);
-    console.log('Admin enum value:', UserTypes.admin);
-
     // Add the business profile creation logic here
     if (role === UserTypes.business_owner) {
       try {
@@ -141,9 +138,8 @@ export class AuthService {
           business_name: signupReqDto.business_name,
           email: signupReqDto.email,
         });
-        console.log('Business profile created successfully.');
       } catch (error) {
-        console.error('Failed to create business profile:', error);
+        this.logger.error('Failed to create business profile:', error);
       }
     } else if (role === UserTypes.admin) {
       try {
@@ -151,9 +147,8 @@ export class AuthService {
           user_id: createUser._id,
           email: signupReqDto.email,
         });
-        console.log('Admin profile created successfully.');
       } catch (error) {
-        console.error('Failed to create admin profile:', error);
+        this.logger.error('Failed to create admin profile:', error);
       }
     }
     await this.tokenQueryService.create({
@@ -265,7 +260,6 @@ export class AuthService {
   async verifyEmail(
     verifyAccountDto: VerifyAccountDto,
   ): Promise<SignupResDto & { resetToken?: string }> {
-    console.log('🛠 verifyEmail called with DTO:', verifyAccountDto);
     let verificationCode: string = '',
       verificationFor: string = '',
       email: string = '';
@@ -276,11 +270,8 @@ export class AuthService {
         verificationCode = result.code;
         verificationFor = result.verificationFor;
         email = result.email;
-
-        console.log('result', result);
       })
-      .catch((err) => {
-        console.log('err', err);
+      .catch(() => {
         throw UnauthorizedException.UNAUTHORIZED_ACCESS(
           'Invalid verification link',
         );
@@ -298,9 +289,6 @@ export class AuthService {
     }
 
     const receivedToken = verifyAccountDto.token;
-    console.log('📥 Raw token from email:', verifyAccountDto.token);
-    console.log('📥 Decoded token:', receivedToken);
-
     const findToken = await this.tokenQueryService.findToken({
       userId: user._id,
       type: verificationFor,
@@ -308,9 +296,6 @@ export class AuthService {
       value: receivedToken,
       userType: user.role,
     });
-
-    console.log('💾 Token in DB:', findToken?.value);
-    console.log('🔍 Match result:', findToken?.value === receivedToken);
 
     if (!findToken) {
       throw UnauthorizedException.UNAUTHORIZED_ACCESS(
@@ -428,12 +413,8 @@ export class AuthService {
   ): Promise<ChangePasswordResDto> {
     const { oldPassword, newPassword } = changePasswordReqDto;
 
-    console.log('Looking for user with ID:', userId);
-    console.log('ID type:', typeof userId);
-
     // Find the user
     const user = await this.userRepository.findOne({ _id: userId });
-    console.log('Found user:', user);
     if (!user) {
       throw UnauthorizedException.RESOURCE_NOT_FOUND('User not found');
     }
@@ -620,7 +601,7 @@ export class AuthService {
         message: 'Logout successful',
       };
     } catch (error) {
-      console.error('Logout error:', error);
+      this.logger.error('Logout error:', error);
       throw UnauthorizedException.UNAUTHORIZED_ACCESS('Failed to logout');
     }
   }
@@ -660,7 +641,7 @@ export class AuthService {
 
       return newAccessToken;
     } catch (error) {
-      console.error('Refresh token error:', error);
+      this.logger.error('Refresh token error:', error);
       throw UnauthorizedException.UNAUTHORIZED_ACCESS(
         'Failed to refresh token',
       );

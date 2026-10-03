@@ -1,4 +1,4 @@
-import { Inject, Injectable } from '@nestjs/common';
+import { Inject, Injectable, Logger } from '@nestjs/common';
 import { InternalServerErrorException } from '../../exceptions/internal-server-error.exception';
 
 import { Token } from './token.schema';
@@ -9,6 +9,8 @@ import { BaseRepository } from '../repository/base.repository';
 
 @Injectable()
 export class TokenQueryService {
+  private readonly logger = new Logger(TokenQueryService.name);
+
   constructor(
     @Inject(Repositories.TokenRepository)
     private readonly tokenRepository: BaseRepository<Token>,
@@ -18,7 +20,7 @@ export class TokenQueryService {
     try {
       return await this.tokenRepository.create(token);
     } catch (error) {
-      console.error('Error creating token:', error);
+      this.logger.error('Error creating token:', error);
       throw InternalServerErrorException.INTERNAL_SERVER_ERROR(error);
     }
   }
@@ -80,7 +82,7 @@ export class TokenQueryService {
     try {
       await this.tokenRepository.deleteMany(filter);
     } catch (error) {
-      console.error('Error deleting multiple tokens:', error);
+      this.logger.error('Error deleting multiple tokens:', error);
       throw InternalServerErrorException.INTERNAL_SERVER_ERROR(error);
     }
   }

@@ -14,14 +14,11 @@
 //    * ✅ FIXED: Enhanced auto-detection with better pattern matching
 //    */
 //   detectValidationRule(questionText: string): ValidationRule {
-//     console.log('⚙️ Running detectValidationRule for:', questionText);
 //     // const questionLower = questionText.toLowerCase().trim();
 //     const questionLower = questionText
 //       .replace(/[’‘]/g, "'")
 //       .trim()
 //       .toLowerCase();
-
-//     console.log('Normalized text:', questionLower);
 
 //     // ✅ 0. SKIP NON-VALIDATION PHRASES (add this block)
 //     if (
@@ -118,16 +115,11 @@
 //       return ValidationRule.NUMBER_ONLY;
 //     }
 
-//     console.log(`Detected rule for: ${questionLower} => NONE`);
-
 //     // ✅ DEFAULT: No validation if pattern doesn't match
 //     return ValidationRule.NONE;
 //     ('');
 //     // Default rule
 //     // const detectedRule = ValidationRule.NONE;
-
-//     // // ✅ Debug log
-//     // console.log('Detected rule for:', questionLower, '=>', detectedRule);
 
 //     // return detectedRule;
 //   }
@@ -573,9 +565,7 @@ export class QuestionValidationService {
    * ✅ FIXED: Enhanced auto-detection with better pattern matching
    */
   detectValidationRule(questionText: string): ValidationRule {
-    console.log('⚙️ Running detectValidationRule for:', questionText);
     const questionLower = questionText.toLowerCase().trim();
-    console.log('Normalized text:', questionLower);
 
     // ✅ PRIORITY ORDER MATTERS - More specific patterns first!
 
@@ -590,7 +580,6 @@ export class QuestionValidationService {
     ];
 
     if (emailPatterns.some((pattern) => pattern.test(questionLower))) {
-      console.log(`✅ Detected EMAIL for: ${questionLower}`);
       return ValidationRule.EMAIL;
     }
 
@@ -610,7 +599,6 @@ export class QuestionValidationService {
     ];
 
     if (phonePatterns.some((pattern) => pattern.test(questionLower))) {
-      console.log(`✅ Detected PHONE for: ${questionLower}`);
       return ValidationRule.PHONE;
     }
 
@@ -637,7 +625,6 @@ export class QuestionValidationService {
     ];
 
     if (urlPatterns.some((pattern) => pattern.test(questionLower))) {
-      console.log(`✅ Detected URL for: ${questionLower}`);
       return ValidationRule.URL;
     }
 
@@ -657,7 +644,6 @@ export class QuestionValidationService {
     ];
 
     if (alphabeticPatterns.some((pattern) => pattern.test(questionLower))) {
-      console.log(`✅ Detected ALPHABETS for: ${questionLower}`);
       return ValidationRule.ALPHABETS_ONLY;
     }
 
@@ -681,11 +667,9 @@ export class QuestionValidationService {
     ];
 
     if (numberPatterns.some((pattern) => pattern.test(questionLower))) {
-      console.log(`✅ Detected NUMBER_ONLY for: ${questionLower}`);
       return ValidationRule.NUMBER_ONLY;
     }
 
-    console.log(`❌ No validation rule detected for: ${questionLower}`);
     // ✅ DEFAULT: No validation if pattern doesn't match
     return ValidationRule.NONE;
   }

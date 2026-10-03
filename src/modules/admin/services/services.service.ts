@@ -4,6 +4,7 @@ import {
   BadRequestException,
   ConflictException,
   Inject,
+  Logger,
 } from '@nestjs/common';
 import { InjectModel } from '@nestjs/mongoose';
 import { Model, Types } from 'mongoose';
@@ -15,6 +16,8 @@ import { ServicesTypes } from 'src/shared/enums';
 
 @Injectable()
 export class ServicesService {
+  private readonly logger = new Logger(ServicesService.name);
+
   constructor(
     @InjectModel(Service.name) private serviceModel: Model<ServiceDocument>,
     private readonly uploadService: UploadService,
@@ -83,7 +86,7 @@ export class ServicesService {
         throw error;
       }
 
-      console.error('Service creation error:', error);
+      this.logger.error('Service creation error:', error);
       // throw new BadRequestException('Failed to create service with images');
 
       throw new BadRequestException(
@@ -180,7 +183,7 @@ async update(
     ) {
       throw error;
     }
-    console.error('Service update error:', error);
+    this.logger.error('Service update error:', error);
     throw new BadRequestException(
       `Failed to update service: ${error.message || 'Unknown error'}`,
     );
@@ -238,7 +241,7 @@ async update(
     ) {
       throw error;
     }
-    console.error('Main image update error:', error);
+    this.logger.error('Main image update error:', error);
     throw new BadRequestException(
       `Failed to update main image: ${error.message || 'Unknown error'}`,
     );
@@ -314,7 +317,7 @@ async update(
     ) {
       throw error;
     }
-    console.error('Service images upload error:', error);
+    this.logger.error('Service images upload error:', error);
     throw new BadRequestException(
       `Failed to upload service images: ${error.message || 'Unknown error'}`,
     );

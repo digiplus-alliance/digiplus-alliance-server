@@ -97,7 +97,6 @@ export class UserApplicationController {
     @Body() submissionDto: SubmissionDto,
     @Req() req: any,
   ): Promise<UserSubmission> {
-    console.log('Authenticated user object:', req.user);
     const userId = req.user._id;
 
     return this.userApplicationService.submitApplication(

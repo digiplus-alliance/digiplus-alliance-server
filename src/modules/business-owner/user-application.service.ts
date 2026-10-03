@@ -443,7 +443,7 @@ export class UserApplicationService {
       // ✅ Return immediately
       return savedSubmission;
     } catch (error) {
-      console.error('Failed to save submission:', error.message);
+      this.logger.error('Failed to save submission:', error.message);
       throw error;
     }
   }

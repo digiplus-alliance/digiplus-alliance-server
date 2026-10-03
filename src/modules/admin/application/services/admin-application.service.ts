@@ -779,7 +779,7 @@ export class AdminApplicationService {
         );
         timetable_url = uploadResult.secure_url;
       } catch (error) {
-        console.error('Cloudinary Upload Error:', error);
+        this.logger.error('Cloudinary Upload Error:', error);
         throw new BadRequestException(
           'Failed to upload timetable file to cloud storage.',
         );
